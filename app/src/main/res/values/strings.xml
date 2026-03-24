@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sudribet</string>
+    <string name="edit_profile_title">ÉDITER MON PROFIL</string>
+    <string name="personal_info_header">INFORMATIONS PERSONNELLES</string>
+    <string name="username_hint">Nom d\'utilisateur</string>
+    <string name="email_hint">Email</string>
+    <string name="preferences_header">PRÉFÉRENCES</string>
+    <string name="score_notifications_label">Notifications de scores</string>
+    <string name="newsletter_label">Newsletter Offres Spéciales</string>
+    <string name="save_profile_button">ENREGISTRER LE PROFIL</string>
+    <string name="delete_account_label">Supprimer mon compte</string>
+    <string name="back_button_desc">Retour</string>
+    <string name="profile_avatar_desc">Avatar du profil</string>
+    <string name="change_avatar_desc">Changer l\'avatar</string>
+</resources>

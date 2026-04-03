@@ -1,19 +1,38 @@
 package com.example.sudribet
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import com.airbnb.lottie.LottieAnimationView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.imageview.ShapeableImageView
+
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.Toast
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var tvBalance: TextView
+    private val handler = Handler(Looper.getMainLooper())
+    private val goalSimulation = object : Runnable {
+        override fun run() {
+            LocalNotificationHelper.showGoalNotification(
+                this@HomeActivity, 
+                "ESME vs EPITA", 
+                "1 - 0"
+            )
+            handler.postDelayed(this, 60000) // Simuler toutes les minutes
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +41,7 @@ class HomeActivity : AppCompatActivity() {
         tvBalance = findViewById(R.id.tvHomeBalance)
         val btnProfil = findViewById<ShapeableImageView>(R.id.btnGoProfil)
         val btnClaimBonus = findViewById<ImageView>(R.id.btnClaimBonus)
-        val lottieConfetti = findViewById<LottieAnimationView>(R.id.lottieConfetti)
-        val cardBotWidget = findViewById<CardView>(R.id.cardBotWidget)
+        val cardBotWidget = findViewById<View>(R.id.cardBotWidget)
 
         updateBalance()
 
@@ -37,9 +55,7 @@ class HomeActivity : AppCompatActivity() {
             balance += 5.0f
             sharedPref.edit().putFloat("balance", balance).apply()
             updateBalance()
-            android.widget.Toast.makeText(this, "Bonus de 5€ crédité !", android.widget.Toast.LENGTH_SHORT).show()
-            
-            lottieConfetti.playAnimation()
+            Toast.makeText(this, "Bonus de 5€ crédité !", Toast.LENGTH_SHORT).show()
         }
 
         cardBotWidget.setOnClickListener {
@@ -67,6 +83,23 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        // Demander la permission de notifications (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+            }
+        }
+
+        // Lancer la simulation de buts
+        handler.postDelayed(goalSimulation, 15000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(goalSimulation)
     }
 
     private fun updateBalance() {

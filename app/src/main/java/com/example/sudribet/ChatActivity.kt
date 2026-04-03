@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class ChatActivity : AppCompatActivity() {
 
@@ -58,9 +59,9 @@ class ChatActivity : AppCompatActivity() {
         rvChat.scrollToPosition(messages.size - 1)
     }
 
-    private fun addBotMessage(text: String) {
+    private fun addBotMessage(text: String, betDesc: String? = null, betCote: Double? = null) {
         val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-        messages.add(Message(text, false, time))
+        messages.add(Message(text, false, time, betDesc, betCote))
         adapter.notifyItemInserted(messages.size - 1)
         rvChat.scrollToPosition(messages.size - 1)
     }
@@ -70,18 +71,37 @@ class ChatActivity : AppCompatActivity() {
             try {
                 // Initialisation du modèle Gemini
                 val generativeModel = GenerativeModel(
-                    modelName = "gemini-2.5-flash",
+                    modelName = "gemini-1.5-flash",
                     apiKey = BuildConfig.GEMINI_API_KEY,
                     systemInstruction = content { 
-                        text("Tu es SudriBot, l'assistant IA de l'application SudriBet. Tu réponds de manière courte et concise, avec un ton amical et tu ajoutes parfois des emojis. L'application permet de parier sur des matchs, retirer ses gains (minimum 10€), obtenir un bonus quotidien de 5€, et contacter le support.") 
+                        text("Tu es SudriBot, l'assistant IA de l'application SudriBet. Tu réponds de manière courte et concise. Si l'utilisateur te demande un pari ou un conseil de mise, tu peux proposer un pari spécifique en incluant à la fin de ta réponse un bloc JSON de ce format : [[BET_JSON:{\"desc\": \"Victoire ESME\", \"cote\": 2.10}]]. Les écoles possibles sont ESME, EPITA, IPSA, Epitech, HEC, Centrale. Ne parle que de sports universitaires.") 
                     }
                 )
                 
                 // Appel asynchrone à l'API Gemini
                 val response = generativeModel.generateContent(userText)
                 
-                response.text?.let { 
-                    addBotMessage(it) 
+                response.text?.let { rawText ->
+                    var cleanText = rawText
+                    var betDesc: String? = null
+                    var betCote: Double? = null
+
+                    // Extraction du JSON si présent
+                    if (rawText.contains("[[BET_JSON:")) {
+                        try {
+                            val start = rawText.indexOf("[[BET_JSON:") + 11
+                            val end = rawText.indexOf("]]", start)
+                            val jsonStr = rawText.substring(start, end)
+                            val json = JSONObject(jsonStr)
+                            betDesc = json.optString("desc")
+                            betCote = json.optDouble("cote")
+                            cleanText = rawText.replace(Regex("\\[\\[BET_JSON:.*?\\]\\]"), "").trim()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    
+                    addBotMessage(cleanText, betDesc, betCote) 
                 } ?: run {
                     addBotMessage("Je n'ai pas pu générer de réponse. Réessayez.")
                 }

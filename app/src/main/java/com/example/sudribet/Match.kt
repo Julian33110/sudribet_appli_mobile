@@ -10,5 +10,6 @@ data class Match(
     val categorie: String,
     val isLive: Boolean = false,
     val scoreA: Int = 0,
-    val scoreB: Int = 0
+    val scoreB: Int = 0,
+    val coteNul: Double? = null
 )

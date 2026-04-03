@@ -1,0 +1,21 @@
+# Fichiers locaux sensibles (NE PAS COMMIT)
+local.properties
+*.hprof
+
+# Build outputs
+build/
+app/build/
+
+# Gradle
+.gradle/
+app/.gradle/
+gradle.properties
+
+# Android Studio
+.idea/
+*.iml
+.DS_Store
+
+# Keystore
+*.jks
+*.keystore

@@ -10,6 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Auto-login : si l'utilisateur est déjà connecté, aller directement à l'accueil
+        val prefs = getSharedPreferences("SudriPrefs", MODE_PRIVATE)
+        if (prefs.getString("email", null) != null) {
+            ActivityTransitions.navigateAndClear(this, Intent(this, HomeActivity::class.java))
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         val etEmail = findViewById<EditText>(R.id.etEmail)

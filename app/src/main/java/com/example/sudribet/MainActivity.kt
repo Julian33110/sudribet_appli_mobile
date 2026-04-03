@@ -16,64 +16,93 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.text.SimpleDateFormat
 import java.util.*
+import java.text.SimpleDateFormat
+import androidx.activity.viewModels
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var adapter: MatchAdapter
-    private val handler = Handler(Looper.getMainLooper())
+    private val viewModel: MatchViewModel by viewModels()
     private var stakeAmount: Double = 10.0
-
-    private val tousLesMatchs = mutableListOf(
-        Match("1", "PSG", "Marseille", 1.85, 3.40, "21:00", "Football", isLive = true, scoreA = 1, scoreB = 0),
-        Match("2", "Toulouse", "La Rochelle", 1.5, 2.5, "15:00", "Rugby"),
-        Match("3", "Lakers", "Warriors", 1.8, 1.9, "21:00", "Basket", isLive = true, scoreA = 88, scoreB = 92),
-        Match("4", "Montpellier", "Paris", 1.4, 2.8, "18:00", "Handball"),
-        Match("5", "Cannes", "Nantes", 1.6, 2.2, "20:00", "Volley"),
-        Match("6", "Real Madrid", "Barça", 2.1, 2.0, "21:00", "Football"),
-        Match("7", "Lyon", "Monaco", 2.30, 2.45, "17:00", "Football"),
-        Match("8", "Stade Français", "Bordeaux", 1.70, 2.10, "19:00", "Rugby")
-    )
-
+    private val handler = Handler(Looper.getMainLooper())
     private val selectedMatches = mutableMapOf<String, Pair<Match, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rv = findViewById<RecyclerView>(R.id.rvMatchs)
-        rv.layoutManager = LinearLayoutManager(this)
+        val composeView = findViewById<ComposeView>(R.id.composeViewMatchs)
+        composeView.setContent {
+            val matches by viewModel.matches.collectAsState()
+            var selectedSport by remember { mutableStateOf("Tous") }
 
-        setupAdapter(tousLesMatchs)
+            Column {
+                // Filtre de sports en Compose
+                val sports = listOf("Tous", "Football", "Rugby", "Basket", "Handball", "Volley")
+                LazyRow(
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(sports) { sport ->
+                        CategoryChip(
+                            text = sport,
+                            isSelected = selectedSport == sport,
+                            onClick = { 
+                                selectedSport = sport 
+                                viewModel.updateSportFilter(sport)
+                            }
+                        )
+                    }
+                }
+
+                // Liste de matchs en Compose
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 100.dp)
+                ) {
+                    items(matches) { match ->
+                        MatchItemCompose(
+                            match = match,
+                            onMatchClick = { 
+                                val intent = Intent(this@MainActivity, MatchDetailActivity::class.java).apply {
+                                    putExtra("nameA", match.equipeA)
+                                    putExtra("nameB", match.equipeB)
+                                    putExtra("scoreA", match.scoreA)
+                                    putExtra("scoreB", match.scoreB)
+                                    putExtra("isLive", match.isLive)
+                                    putExtra("cat", match.categorie)
+                                    putExtra("heure", match.heure)
+                                    putExtra("coteA", match.coteA)
+                                    putExtra("coteB", match.coteB)
+                                }
+                                ActivityTransitions.navigate(this@MainActivity, intent)
+                            },
+                            onBetClick = { m, selection -> 
+                                handleSelection(m, selection, true) 
+                            }
+                        )
+                    }
+                }
+            }
+        }
 
         val etSearch = findViewById<EditText>(R.id.etSearch)
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterBySearch(s.toString())
+                viewModel.updateSearchQuery(s.toString())
             }
             override fun afterTextChanged(s: Editable?) {}
         })
-
-        val chipGroup = findViewById<ChipGroup>(R.id.chipGroupSports)
-        chipGroup.setOnCheckedChangeListener { _, checkedId ->
-            val sport = when (checkedId) {
-                R.id.chipFoot -> "Football"
-                R.id.chipRugby -> "Rugby"
-                R.id.chipBasket -> "Basket"
-                R.id.chipVolley -> "Volley"
-                R.id.chipHand -> "Handball"
-                else -> "Tous"
-            }
-            filterBySport(sport)
-        }
 
         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             ActivityTransitions.navigateBack(this)
@@ -111,43 +140,6 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-        startLiveUpdates()
-    }
-
-    private fun setupAdapter(list: List<Match>) {
-        adapter = MatchAdapter(list) { match, selection, isAdded ->
-            handleSelection(match, selection, isAdded)
-        }
-        findViewById<RecyclerView>(R.id.rvMatchs).adapter = adapter
-    }
-
-    private fun filterBySearch(query: String) {
-        val filtered = tousLesMatchs.filter {
-            it.equipeA.contains(query, ignoreCase = true) || it.equipeB.contains(query, ignoreCase = true)
-        }
-        setupAdapter(filtered)
-    }
-
-    private fun filterBySport(sport: String) {
-        val filtered = if (sport == "Tous") tousLesMatchs else tousLesMatchs.filter { it.categorie == sport }
-        setupAdapter(filtered)
-    }
-
-    private fun startLiveUpdates() {
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                tousLesMatchs.forEachIndexed { index, match ->
-                    if (match.isLive) {
-                        val newScoreA = match.scoreA + if (Random().nextInt(100) > 97) 1 else 0
-                        val newScoreB = match.scoreB + if (Random().nextInt(100) > 97) 1 else 0
-                        tousLesMatchs[index] = match.copy(scoreA = newScoreA, scoreB = newScoreB)
-                        adapter.notifyItemChanged(index)
-                    }
-                }
-                handler.postDelayed(this, 3000)
-            }
-        }, 3000)
     }
 
     private fun handleSelection(match: Match, selection: Int, isAdded: Boolean) {
@@ -174,7 +166,14 @@ class MainActivity : AppCompatActivity() {
             val count = selectedMatches.size
             tvCount.text = if (count > 1) "$count SÉLECTIONS (COMBINÉ)" else "1 SÉLECTION"
             var totalCote = 1.0
-            selectedMatches.values.forEach { totalCote *= if (it.second == 1) it.first.coteA else it.first.coteB }
+            selectedMatches.values.forEach { (match, sel) ->
+                totalCote *= when (sel) {
+                    1 -> match.coteA
+                    2 -> match.coteB
+                    3 -> match.coteNul ?: match.coteB
+                    else -> match.coteB
+                }
+            }
             tvCote.text = "Cote Totale: ${String.format(Locale.US, "%.2f", totalCote)}"
 
             val tvPotentialWinnings = findViewById<TextView>(R.id.tvPotentialWinnings)
@@ -209,9 +208,15 @@ class MainActivity : AppCompatActivity() {
 
         var desc = ""
         var totalCote = 1.0
-        selectedMatches.values.forEach {
-            desc += "${it.first.equipeA} vs ${it.first.equipeB}, "
-            totalCote *= if (it.second == 1) it.first.coteA else it.first.coteB
+        selectedMatches.values.forEach { (match, sel) ->
+            val selLabel = when (sel) { 1 -> "1"; 3 -> "X"; else -> "2" }
+            desc += "${match.equipeA} vs ${match.equipeB} ($selLabel), "
+            totalCote *= when (sel) {
+                1 -> match.coteA
+                2 -> match.coteB
+                3 -> match.coteNul ?: match.coteB
+                else -> match.coteB
+            }
         }
 
         val description = desc.removeSuffix(", ")

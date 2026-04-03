@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="@color/surface_darker">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,10 +16,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Header Section -->
+            <!-- Header Section (Cyber style) -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="280dp"
                 android:background="@color/background_blue"
                 android:padding="20dp">
 
@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="PROFIL"
+                    android:text="MON PROFIL"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -46,41 +46,71 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerInParent="true"
-                    android:background="#FFFFFF"
+                    android:background="#22FFFFFF"
                     android:padding="4dp"
                     android:src="@android:drawable/ic_menu_gallery"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp" />
 
-                <TextView
-                    android:id="@+id/tvUsername"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ivAvatar"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:text="Utilisateur Sudri"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Utilisateur Sudri"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- XP / Level Section -->
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/tvLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NIVEAU 5 - EXPERT"
+                            android:textColor="@color/primary"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                        <ProgressBar
+                            android:id="@+id/pbXP"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_marginTop="4dp"
+                            android:progress="65"
+                            android:progressTint="@color/neon_green"
+                            android:backgroundTint="#33FFFFFF" />
+                    </LinearLayout>
+                </LinearLayout>
             </RelativeLayout>
 
-            <!-- Balance Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Balance Card (Glassmorphism) -->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="-30dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="8dp"
-                app:cardBackgroundColor="?attr/colorSurface">
+                android:layout_marginTop="-40dp"
+                android:background="@drawable/glass_card"
+                android:padding="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="20dp"
                     android:weightSum="2">
 
                     <LinearLayout
@@ -89,20 +119,18 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Solde"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="14sp" />
-
+                            android:text="Portefeuille"
+                            android:textColor="#99FFFFFF"
+                            android:textSize="12sp" />
                         <TextView
                             android:id="@+id/tvBalance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="150.00 €"
-                            android:textColor="@color/background_blue"
+                            android:text="150 SC"
+                            android:textColor="@color/neon_green"
                             android:textSize="22sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -110,8 +138,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="?attr/colorOnSurface"
-                        android:alpha="0.1" />
+                        android:background="#22FFFFFF" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -119,14 +146,12 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Paris en cours"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="14sp" />
-
+                            android:textColor="#99FFFFFF"
+                            android:textSize="12sp" />
                         <TextView
                             android:id="@+id/tvActiveBets"
                             android:layout_width="wrap_content"
@@ -136,138 +161,135 @@
                             android:textSize="22sp"
                             android:textStyle="bold" />
                     </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- Badges Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:text="BADGES &amp; RÉPENSE"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/badgeContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    
+                    <LinearLayout android:layout_width="80dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                        <TextView android:layout_width="50dp" android:layout_height="50dp" android:text="🥉" android:textSize="32sp" android:gravity="center" android:background="@drawable/glass_card"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bronze" android:textColor="#FFFFFF" android:textSize="10sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="80dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_marginStart="12dp">
+                        <TextView android:layout_width="50dp" android:layout_height="50dp" android:text="🥈" android:textSize="32sp" android:gravity="center" android:background="@drawable/glass_card" android:alpha="0.3"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Silver" android:textColor="#66FFFFFF" android:textSize="10sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="80dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_marginStart="12dp">
+                        <TextView android:layout_width="50dp" android:layout_height="50dp" android:text="🥇" android:textSize="32sp" android:gravity="center" android:background="@drawable/glass_card" android:alpha="0.3"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gold" android:textColor="#66FFFFFF" android:textSize="10sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="80dp" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:layout_marginStart="12dp">
+                        <TextView android:id="@+id/tvStreakIcon" android:layout_width="50dp" android:layout_height="50dp" android:text="🔥" android:textSize="32sp" android:gravity="center" android:background="@drawable/glass_card"/>
+                        <TextView android:id="@+id/tvStreakText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Série x3" android:textColor="#FFFFFF" android:textSize="10sp" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </HorizontalScrollView>
 
             <!-- Statistics Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="16dp"
                 android:text="STATISTIQUES"
-                android:textColor="@color/background_blue"
-                android:textSize="14sp"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="?attr/colorSurface">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Paris gagnés"
-                            android:textColor="?attr/colorOnSurface" />
-                        <TextView
-                            android:id="@+id/tvWins"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="12"
-                            android:textColor="#4CAF50"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="?attr/colorOnSurface" android:alpha="0.08" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Paris perdus"
-                            android:textColor="?attr/colorOnSurface" />
-                        <TextView
-                            android:id="@+id/tvLosses"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="5"
-                            android:textColor="#F44336"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="?attr/colorOnSurface" android:alpha="0.08" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Taux de réussite"
-                            android:textColor="?attr/colorOnSurface" />
-                        <TextView
-                            android:id="@+id/tvWinRate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="70.5%"
-                            android:textColor="#2196F3"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Dark Mode Toggle -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
-                android:text="PARAMÈTRES"
-                android:textColor="@color/background_blue"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="?attr/colorSurface">
+                android:background="@drawable/glass_card"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp">
-
+                    android:padding="12dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="🌙 Mode Sombre"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switchDarkMode"
+                        android:text="Paris gagnés"
+                        android:textColor="#FFFFFF" />
+                    <TextView
+                        android:id="@+id/tvWins"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true" />
-
+                        android:text="12"
+                        android:textColor="@color/neon_green"
+                        android:textStyle="bold" />
                 </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Paris perdus"
+                        android:textColor="#FFFFFF" />
+                    <TextView
+                        android:id="@+id/tvLosses"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="5"
+                        android:textColor="@color/neon_red"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Taux de réussite"
+                        android:textColor="#FFFFFF" />
+                    <TextView
+                        android:id="@+id/tvWinRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="70.5%"
+                        android:textColor="#00CCFF"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <!-- Actions -->
             <Button
@@ -277,29 +299,37 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="MODIFIER MON PROFIL"
-                android:backgroundTint="?attr/colorSurface"
-                android:textColor="@color/background_blue" />
+                android:backgroundTint="#22FFFFFF"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="30dp"
                 android:text="DECONNEXION"
-                android:backgroundTint="#F44336"
+                android:backgroundTint="@color/neon_red"
                 android:textColor="#FFFFFF" />
+
+            <!-- Dark Mode Toggle (Hidden or moved if needed, current app uses surface_darker by default now) -->
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchDarkMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Cyber style integration via colors/themes) -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:backgroundTint="@color/surface_darker"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/nav_item_colors"
         app:itemTextColor="@color/nav_item_colors"

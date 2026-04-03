@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 
             val tvPotentialWinnings = findViewById<TextView>(R.id.tvPotentialWinnings)
             val winnings = totalCote * stakeAmount
-            tvPotentialWinnings.text = "${String.format(Locale.US, "%.2f", winnings)} €"
+            tvPotentialWinnings.text = "${winnings.toInt()} SC"
         }
     }
 
@@ -228,9 +228,10 @@ class MainActivity : AppCompatActivity() {
         betsList.add(0, newBet)
         sharedPref.edit().putString("my_bets", Gson().toJson(betsList)).apply()
 
+        DailyManager.incrementBetsToday(this)
         EmailService.sendBetConfirmation(userEmail, description, betCote, betMise)
 
-        Toast.makeText(this, "Pari validé ✅", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Pari validé ! +${betMise.toInt()} SC misés", Toast.LENGTH_SHORT).show()
         ActivityTransitions.navigateBack(this)
     }
 

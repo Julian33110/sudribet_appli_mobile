@@ -2,10 +2,10 @@ package com.example.sudribet
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.Gravity
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,6 +22,10 @@ class ProfilActivity : AppCompatActivity() {
     private lateinit var tvLosses: TextView
     private lateinit var tvWinRate: TextView
     private lateinit var tvActiveBets: TextView
+    private lateinit var tvLevel: TextView
+    private lateinit var pbXP: ProgressBar
+    private lateinit var tvStreakText: TextView
+    private lateinit var badgeContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,10 @@ class ProfilActivity : AppCompatActivity() {
         tvLosses = findViewById(R.id.tvLosses)
         tvWinRate = findViewById(R.id.tvWinRate)
         tvActiveBets = findViewById(R.id.tvActiveBets)
+        tvLevel = findViewById(R.id.tvLevel)
+        pbXP = findViewById(R.id.pbXP)
+        tvStreakText = findViewById(R.id.tvStreakText)
+        badgeContainer = findViewById(R.id.badgeContainer)
 
         val btnBack = findViewById<ImageView>(R.id.ivBack)
         val btnEdit = findViewById<Button>(R.id.btnEditProfil)
@@ -41,46 +49,31 @@ class ProfilActivity : AppCompatActivity() {
 
         updateUI()
 
-        // Dark Mode toggle
         val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
         val isDark = prefs.getBoolean("dark_mode", false)
         switchDarkMode.isChecked = isDark
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("dark_mode", isChecked).apply()
             AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                else AppCompatDelegate.MODE_NIGHT_NO
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
             )
         }
 
         btnBack.setOnClickListener { ActivityTransitions.navigateBack(this) }
-
-        btnEdit.setOnClickListener {
-            ActivityTransitions.navigate(this, Intent(this, EditProfilActivity::class.java))
-        }
-
+        btnEdit.setOnClickListener { ActivityTransitions.navigate(this, Intent(this, EditProfilActivity::class.java)) }
         btnLogout.setOnClickListener {
+            prefs.edit().remove("email").apply()
             ActivityTransitions.navigateAndClear(this, Intent(this, LoginActivity::class.java))
         }
 
-        // Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_profil
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    ActivityTransitions.navigateTab(this, Intent(this, HomeActivity::class.java))
-                    true
-                }
-                R.id.nav_bet -> {
-                    ActivityTransitions.navigateTab(this, Intent(this, MainActivity::class.java))
-                    true
-                }
-                R.id.nav_history -> {
-                    ActivityTransitions.navigateTab(this, Intent(this, HistoryActivity::class.java))
-                    true
-                }
-                R.id.nav_profil -> true // déjà ici
+                R.id.nav_home -> { ActivityTransitions.navigateTab(this, Intent(this, HomeActivity::class.java)); true }
+                R.id.nav_bet -> { ActivityTransitions.navigateTab(this, Intent(this, MainActivity::class.java)); true }
+                R.id.nav_history -> { ActivityTransitions.navigateTab(this, Intent(this, HistoryActivity::class.java)); true }
+                R.id.nav_profil -> true
                 else -> false
             }
         }
@@ -89,26 +82,25 @@ class ProfilActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateUI()
-        // Restaurer l'état du switch
         val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
         findViewById<SwitchMaterial>(R.id.switchDarkMode)?.isChecked = prefs.getBoolean("dark_mode", false)
         findViewById<BottomNavigationView>(R.id.bottomNav)?.selectedItemId = R.id.nav_profil
     }
 
     private fun updateUI() {
-        val sharedPref = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
+        val name = prefs.getString("username", "Parieur Sudri")
+        val balance = prefs.getFloat("balance", 150f)
 
-        val name = sharedPref.getString("username", "Utilisateur Sudri")
-        val balance = sharedPref.getFloat("balance", 150.0f)
         tvUsername.text = name
-        tvBalance.text = String.format(Locale.US, "%.2f €", balance)
+        tvBalance.text = "${balance.toInt()} SC"
 
-        val betsJson = sharedPref.getString("my_bets", "[]")
+        val betsJson = prefs.getString("my_bets", "[]")
         val type = object : TypeToken<List<Bet>>() {}.type
         val betsList: List<Bet> = Gson().fromJson(betsJson, type)
 
         val activeCount = betsList.count { it.status == "En cours" }
-        val winsCount = betsList.count { it.status == "Gagné" }
+        val winsCount = betsList.count { it.status == "Gagne" }
         val lossesCount = betsList.count { it.status == "Perdu" }
 
         tvActiveBets.text = activeCount.toString()
@@ -116,11 +108,61 @@ class ProfilActivity : AppCompatActivity() {
         tvLosses.text = lossesCount.toString()
 
         val totalFinished = winsCount + lossesCount
-        if (totalFinished > 0) {
-            val rate = (winsCount.toDouble() / totalFinished.toDouble()) * 100
-            tvWinRate.text = String.format(Locale.US, "%.1f%%", rate)
-        } else {
-            tvWinRate.text = "0%"
+        tvWinRate.text = if (totalFinished > 0)
+            String.format(Locale.US, "%.1f%%", (winsCount.toDouble() / totalFinished) * 100)
+        else "0%"
+
+        val totalBets = betsList.size
+        val totalXP = (totalBets * 50) + (winsCount * 100)
+        val level = (totalXP / 500) + 1
+        val progress = (totalXP % 500).toDouble() / 500.0 * 100
+
+        val rank = when { level < 3 -> "DEBUTANT"; level < 7 -> "AMATEUR"; level < 12 -> "EXPERT"; else -> "LEGENDE" }
+        tvLevel.text = "NIVEAU $level - $rank"
+        pbXP.progress = progress.toInt()
+
+        var streak = 0
+        for (bet in betsList) { if (bet.status == "Gagne") streak++ else break }
+        tvStreakText.text = "Serie x$streak"
+        findViewById<android.view.View>(R.id.tvStreakIcon).alpha = if (streak > 0) 1.0f else 0.3f
+
+        updateBadges(betsList, balance)
+    }
+
+    private fun updateBadges(bets: List<Bet>, balance: Float) {
+        badgeContainer.removeAllViews()
+        val badges = BadgeSystem.getBadges(bets, balance)
+        badges.forEach { badge ->
+            val col = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(dpToPx(90), LinearLayout.LayoutParams.WRAP_CONTENT).also {
+                    it.marginEnd = dpToPx(12)
+                }
+                alpha = if (badge.unlocked) 1f else 0.25f
+            }
+            val icon = TextView(this).apply {
+                text = badge.emoji
+                textSize = 28f
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(dpToPx(50), dpToPx(50))
+                setBackgroundColor(0x11FFFFFF)
+            }
+            val label = TextView(this).apply {
+                text = badge.name
+                textSize = 9f
+                gravity = Gravity.CENTER
+                setTextColor(if (badge.unlocked) 0xFFFFFFFF.toInt() else 0x66FFFFFF.toInt())
+                setTypeface(null, if (badge.unlocked) Typeface.BOLD else Typeface.NORMAL)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                ).also { it.topMargin = dpToPx(4) }
+            }
+            col.addView(icon)
+            col.addView(label)
+            badgeContainer.addView(col)
         }
     }
+
+    private fun dpToPx(dp: Int): Int = (dp * resources.displayMetrics.density).toInt()
 }

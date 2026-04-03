@@ -28,9 +28,9 @@ class BetAdapter(private val bets: List<Bet>) : RecyclerView.Adapter<BetAdapter.
         holder.tvDate.text = bet.date
         holder.tvStatus.text = bet.status.uppercase()
         holder.tvDesc.text = bet.description
-        holder.tvMise.text = String.format("%.2f €", bet.mise)
+        holder.tvMise.text = String.format("%d SC", bet.mise)
         holder.tvCote.text = String.format("%.2f", bet.totalCote)
-        holder.tvGains.text = String.format("%.2f €", bet.gainsPotentiels)
+        holder.tvGains.text = String.format("%d SC", bet.gainsPotentiels)
 
         if (bet.status == "Gagné") {
             holder.tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_dark))

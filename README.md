@@ -152,6 +152,19 @@ GEMINI_API_KEY=votre_clé
 
 ---
 
+## Déroulé de la présentation
+
+| Ordre | Qui | Durée | Contenu |
+|---|---|---|---|
+| 1 | **Julian** | ~5 min | Architecture du projet, API FFSU, déploiement Railway |
+| 2 | **Malo** | ~5 min | UX/UI Android, gamification, navigation, profil |
+| 3 | **Sacha** | ~5 min | Fonctionnalités de paris, historique, notifications |
+| 4 | **Tous** | ~5 min | **Démo live** — le jury scanne le QR code, installe l'app, place un pari en direct |
+
+> Le QR code est affiché uniquement au moment de la démo finale pour que tout le monde suive en même temps.
+
+---
+
 ## Équipe
 
 | Nom | Rôle |

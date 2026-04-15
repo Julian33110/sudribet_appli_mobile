@@ -7,192 +7,166 @@
 
 ## Présentation du projet
 
-SudriBet est une application mobile de paris sportifs dédiée aux compétitions universitaires de la **FFSU** (Fédération Française du Sport Universitaire). Elle récupère automatiquement les matchs officiels, permet de parier en monnaie virtuelle (**SudriCoins**), et résout les paris automatiquement dès que les résultats sont publiés.
-
-### Plateformes
-| Plateforme | Technologie | Statut |
-|---|---|---|
-| Android | Kotlin + Jetpack | ✅ Disponible |
-| iOS | SwiftUI | ✅ Disponible |
-| API Backend | Node.js + Railway | ✅ En production |
+SudriBet est une application Android de paris sportifs dédiée aux compétitions universitaires de la **FFSU** (Fédération Française du Sport Universitaire). Elle récupère automatiquement les matchs officiels depuis le site FFSU, permet de parier en monnaie virtuelle (**SudriCoins**), et résout les paris automatiquement dès que les vrais scores sont publiés.
 
 ---
 
-## Architecture technique
+## Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│              Applications mobiles            │
-│   Android (Kotlin)    │    iOS (SwiftUI)     │
-└──────────────┬──────────────────────────────┘
-               │ HTTPS / REST
-               ▼
-┌─────────────────────────────────────────────┐
-│           SudriBet API (Railway)             │
-│   https://sublime-manifestation-production   │
-│          -f0ae.up.railway.app               │
+┌──────────────────────────┐
+│     App Android (Kotlin)  │
+│   Retrofit2 + Gson        │
+└────────────┬─────────────┘
+             │ HTTPS / REST
+             ▼
+┌──────────────────────────────────────────────┐
+│          SudriBet API — Railway              │
+│  https://sublime-manifestation-production    │
+│         -f0ae.up.railway.app                │
 │                                              │
-│  Node.js + Express + Cheerio + pdftotext    │
-└──────────────┬──────────────────────────────┘
-               │ Scraping HTTP + PDF
-               ▼
-┌─────────────────────────────────────────────┐
-│         sport-u.com (FFSU officiel)          │
-│   PDFs calendriers & résultats par sport    │
-└─────────────────────────────────────────────┘
+│  Node.js · Express · Cheerio · pdftotext    │
+└────────────┬─────────────────────────────────┘
+             │ Scraping HTTP + parsing PDF
+             ▼
+┌──────────────────────────┐
+│   sport-u.com (FFSU)     │
+│  Calendriers & résultats │
+│  officiels en PDF        │
+└──────────────────────────┘
 ```
 
 ### Fonctionnement de l'API
-1. L'API scrape le site officiel FFSU toutes les heures
-2. Elle télécharge les PDFs (calendriers, quarts de finale, résultats)
-3. Elle extrait les matchs avec `pdftotext` et un parser custom
-4. Elle expose les matchs à venir (`isUpcoming: true`) et les résultats passés
+1. Scrape le site officiel FFSU toutes les heures
+2. Télécharge les PDFs (calendriers, quarts de finale, résultats)
+3. Extrait les matchs avec `pdftotext` + parser custom (dates FR, équipes, scores)
+4. Distingue matchs à venir (`isUpcoming: true`) et résultats passés avec scores réels
 
-### Endpoints principaux
-| Méthode | Route | Description |
-|---|---|---|
-| GET | `/matches?upcoming=true` | Matchs à venir (pour parier) |
-| GET | `/matches` | Tous les matchs + résultats |
-| GET | `/matches/:id` | Détail d'un match |
-| GET | `/sports` | Liste des sports disponibles |
-| GET | `/health` | Statut de l'API |
-| POST | `/refresh` | Forcer un rechargement des données |
+### Endpoints
+| Route | Description |
+|---|---|
+| `GET /matches?upcoming=true` | Matchs à venir (pour parier) |
+| `GET /matches` | Tous les matchs + résultats |
+| `GET /health` | Statut + cache |
+| `POST /refresh` | Forcer un rechargement |
 
 ---
 
 ## Division du travail — Présentation jury
 
-### Julian — Backend & Architecture
+### Julian — Backend & Intégration API
 
-**Thème : « Comment l'application récupère de vrais matchs ? »**
+**Thème : « Comment on récupère de vrais matchs universitaires ? »**
 
-- Conception de l'architecture globale du projet (API + Mobile)
-- Développement du backend Node.js + Express
-- Scraping automatique du site FFSU (Cheerio) et parsing des PDFs (pdftotext)
-- Système de détection des matchs à venir vs résultats passés
-- Déploiement en production sur Railway avec Docker
-- Intégration API dans l'application Android (Retrofit2)
-- Système de résolution automatique des paris (`BetResolver`) : dès qu'un match se termine, les paris sont résolus en comparant l'équipe choisie avec le vrai score FFSU
+- Conception de l'architecture globale
+- Backend Node.js + Express : scraping FFSU, parsing PDF, endpoints REST
+- Déploiement en production sur Railway (Docker)
+- Intégration API dans l'app Android (Retrofit2, `MatchApiService`, `MatchViewModel`)
+- Système de résolution automatique des paris (`BetResolver`) : l'app appelle l'API au démarrage, compare l'équipe choisie avec le vrai score, et tranche Gagné/Perdu
+- Bonus : version iOS SwiftUI (démo rapide)
 
-**Points clés à montrer :**
-- Live demo : `GET /matches?upcoming=true` → vrais matchs FFSU du 30 avril au 21 mai
-- Rafraîchissement automatique toutes les heures (cache + Railway)
-- Expliquer comment `pdftotext` extrait les données des PDFs officiels FFSU
-
----
-
-### Malo — Application iOS
-
-**Thème : « L'expérience utilisateur sur iPhone »**
-
-- Développement complet de l'application iOS en SwiftUI
-- Thème visuel dark (#00FF88 — vert néon sur fond sombre)
-- Écran de connexion et inscription (`LoginView`)
-- Interface de paris (`BettingView`) avec affichage des cotes
-- Navigation multi-onglets (`MainTabView`)
-- Compatibilité iPhone (iOS 26.3+)
-- Adaptation du design pour les standards Apple (Human Interface Guidelines)
-
-**Points clés à montrer :**
-- Navigation fluide entre les écrans
-- Cohérence visuelle avec la version Android
-- Expérience utilisateur spécifique iOS (gestures, animations SwiftUI)
+**À montrer :**
+- `curl https://.../matches?upcoming=true` → vrais matchs FFSU en JSON
+- Logique de parsing PDF (extraire "ASU BORDEAUX vs NANTES SU — 30 avril 2026")
+- Résolution d'un pari : le score arrive → le pari se résout seul
 
 ---
 
-### Sacha — Application Android
+### Malo — Interface utilisateur & Expérience
 
-**Thème : « Les fonctionnalités de l'app Android »**
+**Thème : « L'expérience de l'utilisateur dans l'app »**
 
-- Développement de l'application Android en Kotlin
-- Interface principale : liste des matchs temps réel, filtres par sport, recherche
-- Système de gamification : **SudriCoins**, missions quotidiennes, classement global
-- Écran profil avec avatar, statistiques et historique
-- Chat communautaire entre parieurs
-- Bonus quotidien (`DailyManager`) et badges de progression
-- Notifications push pour les résultats des paris
+- Design général de l'application : thème sombre, charte graphique, cohérence visuelle
+- Écrans Home, Profil, Classement
+- Navigation entre les onglets (Bottom Navigation)
+- Système de gamification : SudriCoins, missions quotidiennes, badges
+- Chat communautaire
 - Dark mode / Light mode
 
-**Points clés à montrer :**
-- Placer un pari en direct : sélectionner match → choisir équipe → saisir mise → confirmer
-- Voir les gains potentiels calculés en temps réel selon la cote
-- Historique des paris avec statut Gagné / Perdu / En cours
+**À montrer :**
+- Navigation fluide entre les onglets
+- Écran Home avec solde SudriCoins et missions
 - Classement général des parieurs
 
 ---
 
-## Télécharger l'application lors de la présentation
+### Sacha — Fonctionnalités de Paris
 
-### Android
+**Thème : « Comment on parie et comment on gagne ? »**
 
-**Scanner le QR code** ou télécharger directement depuis :  
-👉 [GitHub Releases — SudriBet.apk](https://github.com/Julian33110/sudribet_appli_mobile/releases/latest)
+- Écran principal : liste des matchs temps réel, filtres par sport, recherche
+- Interface de pari : sélection équipe (A / Nul / B), saisie de la mise, calcul des gains en temps réel
+- Historique des paris : Gagné / Perdu / En cours
+- Notifications push pour les résultats
+- Système de bonus quotidien (`DailyManager`)
+- Écran profil avec statistiques personnelles
 
-> ⚠️ Avant d'installer : aller dans **Paramètres → Sécurité → Sources inconnues** et activer l'option.
-
-Étapes d'installation :
-1. Scanner le QR code affiché pendant la démo
-2. Télécharger `SudriBet.apk` (17 Mo)
-3. Ouvrir le fichier → **Installer**
-4. Lancer SudriBet
-
-### iOS
-
-1. Installer **TestFlight** depuis l'App Store
-2. Scanner le QR code iOS ou ouvrir le lien d'invitation
-3. Accepter → **Installer SudriBet**
-
-> Si TestFlight n'est pas disponible, l'app iOS sera démontrée en direct sur iPhone pendant la présentation.
+**À montrer :**
+- Parcours complet : voir un match → choisir une équipe → entrer une mise → confirmer
+- Gains potentiels qui se calculent en direct
+- Onglet Historique avec les paris résolus
 
 ---
 
-## Lancer le projet en local (développement)
+## Télécharger l'app lors de la présentation
 
-### API Backend
+### Android (pour tout le monde dans la salle)
+
+Télécharger l'APK depuis :  
+**👉 [github.com/Julian33110/sudribet_appli_mobile/releases/latest](https://github.com/Julian33110/sudribet_appli_mobile/releases/latest)**
+
+Ou scanner le QR code affiché pendant la démo.
+
+> Avant d'installer : **Paramètres → Sécurité → Sources inconnues** (à activer une fois)
+
+Étapes (30 secondes) :
+1. Scanner le QR code
+2. Télécharger `SudriBet.apk`
+3. Ouvrir → Installer → Lancer
+
+### iOS (démo bonus)
+
+Présenté directement sur iPhone par Julian. Pas de téléchargement nécessaire.
+
+---
+
+## Lancer en local
+
+### API
 
 ```bash
 cd sudribet-api
 npm install
-node index.js
-# → http://localhost:3000
+node index.js          # → http://localhost:3000
 ```
 
-Prérequis : `pdftotext` installé
-- macOS : `brew install poppler`
-- Linux : `apt install poppler-utils`
+Prérequis : `brew install poppler` (macOS) ou `apt install poppler-utils` (Linux)
 
-### Application Android
+### Android
 
-Ouvrir le dossier dans **Android Studio**, puis :
-- Build → Run `app`
-
-Créer `local.properties` à la racine avec :
+Ouvrir dans **Android Studio** → Run.  
+Ajouter dans `local.properties` :
 ```
-GEMINI_API_KEY=votre_clé_gemini
+GEMINI_API_KEY=votre_clé
 ```
-
-### Application iOS
-
-Ouvrir `SudriBet.xcodeproj` dans **Xcode**, sélectionner un iPhone, puis `⌘R`.
 
 ---
 
 ## Équipe
 
-| Nom | Rôle | GitHub |
-|---|---|---|
-| Julian | Backend API + Architecture + Intégration | [@Julian33110](https://github.com/Julian33110) |
-| Malo | Application iOS (SwiftUI) | [@malWakanda](https://github.com/malWakanda) |
-| Sacha | Application Android (Kotlin) | — |
+| Nom | Rôle |
+|---|---|
+| **Julian** | Backend API + Architecture + Intégration Android |
+| **Malo** | UX/UI Android + Gamification |
+| **Sacha** | Fonctionnalités Paris + Historique |
 
 ---
 
-## Technologies
+## Stack technique
 
-| Composant | Stack |
+| Couche | Technologies |
 |---|---|
-| API | Node.js, Express, Cheerio, Axios, pdftotext (poppler) |
+| API | Node.js, Express, Cheerio, Axios, pdftotext |
 | Déploiement | Railway, Docker |
-| Android | Kotlin, Retrofit2, Gson, Gemini AI SDK, RecyclerView, SharedPreferences |
-| iOS | SwiftUI, URLSession |
-| Données | FFSU sport-u.com — scraping PDF automatique |
+| Android | Kotlin, Retrofit2, Gson, Gemini AI, RecyclerView, SharedPreferences |
+| Données | FFSU sport-u.com — PDFs officiels |

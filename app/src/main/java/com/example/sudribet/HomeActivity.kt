@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,10 +14,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.imageview.ShapeableImageView
 import android.os.Handler
 import android.os.Looper
+import java.io.File
 
 class HomeActivity : AppCompatActivity() {
 
@@ -35,9 +39,14 @@ class HomeActivity : AppCompatActivity() {
         val tvMission1 = findViewById<TextView>(R.id.tvMission1)
         val tvMission2 = findViewById<TextView>(R.id.tvMission2)
         val tvMission3 = findViewById<TextView>(R.id.tvMission3)
+        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val btnQuickBet = findViewById<TextView>(R.id.btnQuickBet)
+        val btnQuickHistory = findViewById<TextView>(R.id.btnQuickHistory)
 
-        // Résoudre les paris en cours au démarrage
-        BetResolver.resolveAll(this)
+        // Résoudre les paris en cours au démarrage (vérifie les vrais scores API)
+        lifecycleScope.launch {
+            try { BetResolver.resolveAll(this@HomeActivity) } catch (e: Exception) { e.printStackTrace() }
+        }
 
         // Recharge quotidienne
         val recharged = DailyManager.checkDailyRecharge(this)
@@ -48,8 +57,21 @@ class HomeActivity : AppCompatActivity() {
         updateBalance()
         updateMissions(tvMission1, tvMission2, tvMission3)
 
+        // Salutation personnalisée
+        val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
+        val username = prefs.getString("username", "Parieur")
+        tvGreeting.text = "Bonjour, $username 👋"
+
         btnProfil.setOnClickListener {
             ActivityTransitions.navigateTab(this, Intent(this, ProfilActivity::class.java))
+        }
+
+        btnQuickBet.setOnClickListener {
+            ActivityTransitions.navigateTab(this, Intent(this, MainActivity::class.java))
+        }
+
+        btnQuickHistory.setOnClickListener {
+            ActivityTransitions.navigateTab(this, Intent(this, HistoryActivity::class.java))
         }
 
         btnClaimBonus.setOnClickListener {
@@ -98,22 +120,23 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateMissions(tv1: TextView, tv2: TextView, tv3: TextView) {
-        val missions = DailyManager.getMissions(this)
-        val views = listOf(tv1, tv2, tv3)
-        missions.forEachIndexed { i, m ->
-            val status = if (m.completed) "✅" else "${m.progress}/${m.goal}"
-            views[i].text = "${m.emoji()} ${m.title} — +${m.reward} SC  [$status]"
-            views[i].alpha = if (m.completed) 0.5f else 1f
-
-            if (m.completed && !DailyManager.isMissionClaimed(this, i)) {
-                DailyManager.claimMissionReward(this, i, m.reward)
-                updateBalance()
+    private fun updateMissions(tv1: TextView?, tv2: TextView?, tv3: TextView?) {
+        try {
+            val missions = DailyManager.getMissions(this)
+            val views = listOf(tv1, tv2, tv3)
+            missions.forEachIndexed { i, m ->
+                val status = if (m.completed) "[OK]" else "${m.progress}/${m.goal}"
+                views[i]?.text = "${m.title} +${m.reward} SC [$status]"
+                views[i]?.alpha = if (m.completed) 0.5f else 1f
+                if (m.completed && !DailyManager.isMissionClaimed(this, i)) {
+                    DailyManager.claimMissionReward(this, i, m.reward)
+                    updateBalance()
+                }
             }
-        }
+        } catch (e: Exception) { e.printStackTrace() }
     }
 
-    private fun DailyMission.emoji() = when (goal) { 3 -> "🎯"; 1 -> if (title.contains("Gagne")) "🏆" else "⚡"; else -> "📋" }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -128,8 +151,20 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        BetResolver.resolveAll(this)
+        lifecycleScope.launch {
+            try { BetResolver.resolveAll(this@HomeActivity) } catch (e: Exception) { e.printStackTrace() }
+        }
         updateBalance()
+        loadAvatar()
         findViewById<BottomNavigationView>(R.id.bottomNav)?.selectedItemId = R.id.nav_home
+    }
+
+    private fun loadAvatar() {
+        val path = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
+            .getString("avatar_path", null) ?: return
+        val file = File(path)
+        if (file.exists()) {
+            findViewById<ShapeableImageView>(R.id.btnGoProfil)?.setImageURI(Uri.fromFile(file))
+        }
     }
 }

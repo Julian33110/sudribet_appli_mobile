@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="@color/surface_darker">
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_blue"
         android:padding="16dp">
 
         <ImageView
@@ -40,18 +39,17 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Score / Team Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Score / Team Card (Glassmorphism) -->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:background="@drawable/glass_card"
+                android:padding="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp"
                     android:gravity="center">
 
                     <TextView
@@ -59,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FOOTBALL"
-                        android:textColor="#999999"
+                        android:textColor="@color/primary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -78,6 +76,7 @@
                             android:layout_weight="1.2"
                             android:text="Equipe A"
                             android:textAlignment="center"
+                            android:textColor="#FFFFFF"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -89,7 +88,7 @@
                             android:text="VS"
                             android:textAlignment="center"
                             android:textSize="20sp"
-                            android:textColor="@color/primary"
+                            android:textColor="@color/neon_green"
                             android:textStyle="bold" />
 
                         <TextView
@@ -99,6 +98,7 @@
                             android:layout_weight="1.2"
                             android:text="Equipe B"
                             android:textAlignment="center"
+                            android:textColor="#FFFFFF"
                             android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -109,83 +109,149 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="15:00"
-                        android:textColor="#757575" />
+                        android:textColor="#999999" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- IA Advisor Button -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnIAAdvisor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2200FFCC">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="🧠"
+                        android:textSize="24sp"
+                        android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CONSEILLER IA"
+                            android:textColor="#00FFCC"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Analyse des cotes par l'IA Gemini"
+                            android:textColor="#9900FFCC"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play"
+                        app:tint="#00FFCC" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Predictor Section -->
+            <!-- IA Advice Text (Hidden by default) -->
+            <TextView
+                android:id="@+id/tvIAAdvice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/glass_card"
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <!-- Betting Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="SIMULATEUR DE SCORE"
-                android:textColor="@color/background_blue"
+                android:text="PLACER UN PARI"
+                android:textColor="@color/primary"
                 android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:cardCornerRadius="12dp">
+                android:background="@drawable/glass_card"
+                android:padding="20dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp"
                     android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Proposez votre score exact :"
-                        android:textSize="14sp" />
-
+                    <!-- Choix : Equipe A / Nul / Equipe B -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="16dp"
+                        android:weightSum="3"
                         android:gravity="center">
 
-                        <EditText
-                            android:id="@+id/etScoreA"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:text="0"
-                            android:gravity="center"
-                            android:background="@android:drawable/editbox_background"/>
+                        <Button
+                            android:id="@+id/btnBetA"
+                            android:layout_width="0dp"
+                            android:layout_height="70dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            android:text="Equipe A\n1.00"
+                            android:textSize="12sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#33FFFFFF" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" - "
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                        <Button
+                            android:id="@+id/btnBetNul"
+                            android:layout_width="0dp"
+                            android:layout_height="70dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="4dp"
+                            android:text="Nul\n1.00"
+                            android:textSize="12sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#33FFFFFF"
+                            android:visibility="gone" />
 
-                        <EditText
-                            android:id="@+id/etScoreB"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:text="0"
-                            android:gravity="center"
-                            android:background="@android:drawable/editbox_background"/>
+                        <Button
+                            android:id="@+id/btnBetB"
+                            android:layout_width="0dp"
+                            android:layout_height="70dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="Equipe B\n1.00"
+                            android:textSize="12sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#33FFFFFF" />
                     </LinearLayout>
 
+                    <!-- Cote sélectionnée -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="16dp"
                         android:padding="12dp"
-                        android:background="#F9F9F9"
+                        android:background="#11FFFFFF"
                         android:gravity="center">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cote estimée"
+                            android:text="Cote sélectionnée"
                             android:textSize="12sp"
                             android:textColor="#999999" />
 
@@ -193,23 +259,49 @@
                             android:id="@+id/tvDynamicCote"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="15.50"
-                            android:textColor="@color/primary"
+                            android:text="—"
+                            android:textColor="@color/neon_green"
                             android:textSize="32sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
+                    <!-- Mise -->
+                    <EditText
+                        android:id="@+id/etMise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Mise (SC)"
+                        android:inputType="numberDecimal"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#888888"
+                        android:background="#33FFFFFF"
+                        android:padding="12dp"
+                        android:gravity="center" />
+
+                    <!-- Gains potentiels -->
+                    <TextView
+                        android:id="@+id/tvGainsPotentiels"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/neon_green"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
+
+                    <!-- Confirmer -->
                     <Button
                         android:id="@+id/btnBetExactScore"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="16dp"
-                        android:text="PARIER SUR CE SCORE"
-                        android:backgroundTint="@color/background_blue"
+                        android:text="CONFIRMER LE PARI"
+                        android:backgroundTint="@color/primary"
                         android:textColor="#FFFFFF" />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </FrameLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -39,15 +39,19 @@ class MatchAdapter(
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, MatchDetailActivity::class.java)
+            intent.putExtra("matchId", match.id)
             intent.putExtra("nameA", match.equipeA)
             intent.putExtra("nameB", match.equipeB)
             intent.putExtra("scoreA", match.scoreA)
             intent.putExtra("scoreB", match.scoreB)
             intent.putExtra("isLive", match.isLive)
+            intent.putExtra("isUpcoming", match.isUpcoming)
             intent.putExtra("cat", match.categorie)
             intent.putExtra("heure", match.heure)
+            intent.putExtra("date", match.date)
             intent.putExtra("coteA", match.coteA)
             intent.putExtra("coteB", match.coteB)
+            intent.putExtra("coteNul", match.coteNul ?: 0.0)
             context.startActivity(intent)
         }
 

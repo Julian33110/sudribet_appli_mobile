@@ -10,9 +10,9 @@
 
 | Membre | Domaine |
 |---|---|
-| 👤 **Julian Expert** | Architecture · Backend · Intégration API · BetResolver |
-| 👤 **Malo Greffier** | UX/UI Android · Gamification · Navigation · Profil · Classement |
-| 👤 **Sacha Lathuillière** | Fonctionnalités Paris · Historique · Notifications · Missions quotidiennes |
+| 👤 **Julian Expert** | Architecture · Backend · Intégration API · BetResolver · EmailService |
+| 👤 **Malo Greffier** | UX/UI Android · Toutes les Activities · Navigation · Gamification · Classement |
+| 👤 **Sacha Lathuillière** | Fonctionnalités Paris · Historique · Missions · Notifications · Badges |
 
 ---
 
@@ -37,11 +37,7 @@
 ## 02 — Analyse *(Toute l'équipe)*
 
 ### Valeur ajoutée
-- Fédérer autour du sport
-- Stimuler la vie du campus
-- Alternative saine aux paris réels
-- Accessibilité pour tous les étudiants
-- Reconnaissance via un système de récompenses
+- Fédérer autour du sport · Stimuler la vie du campus · Alternative saine · Accessibilité · Reconnaissance
 
 ### Les chiffres *(sondage Microsoft Forms 08/2025 — étudiants ESME)*
 
@@ -52,10 +48,7 @@
 | Utilisent leur smartphone quotidiennement | **100%** |
 
 ### Utilisateur cible — Maxime
-- **Poste :** Étudiant en école d'ingénieur, 19 ans
-- **Objectifs :** Profiter au maximum des opportunités de son école
-- **Préoccupations :** Se sentir intégré et participer à des événements
-- **Profil :** Innovant, sportif, joueur, ouverture d'esprit
+19 ans · Étudiant en école d'ingénieur · Innovant, sportif, joueur · Veut se sentir intégré et participer aux événements de son école
 
 ---
 
@@ -65,15 +58,13 @@
 |---|---|
 | **Vision** | Augmenter de **50%** la présence des supporters aux matchs |
 | **Target Group** | Étudiants de l'ESME, surtout les premières années |
-| **Besoins étudiants** | Centralisation des infos (scores, calendriers), accès mobile natif en temps réel |
-| **Besoins BDS** | Diffusion et promotion des événements sportifs |
 | **Produit** | App mobile Android de paris fictifs en SudriCoins (monnaie virtuelle) |
 
-**Partenaire clé — BDS IONIS :** Assurer l'alimentation des données et la promotion de la solution. Objectif long terme : que SudriBet devienne l'outil officiel du BDS.
+**Partenaire clé — BDS IONIS :** Alimenter les données et promouvoir la solution. Objectif : que SudriBet devienne l'outil officiel du BDS.
 
 ---
 
-## 04 — Modèle Conceptuel *(Julian · Architecture globale)*
+## 04 — Modèle Conceptuel *(Toute l'équipe)*
 
 ### Cas d'utilisations
 **Étudiant :** Consulter ses jetons, les matchs, le classement, l'historique · Parier · Se connecter / S'inscrire  
@@ -91,7 +82,7 @@
 └─────────────────────────┬───────────────────────────────────────┘
                           ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  COUCHE MÉTIER — MANAGERS + VIEWMODEL        👤 Julian · Sacha  │
+│  COUCHE MÉTIER — MANAGERS + VIEWMODEL              👤 Sacha     │
 │  MatchViewModel  BetResolver  DailyManager  BadgeSystem         │
 │  ActivityTransitions  EmailService  LocalNotificationHelper     │
 │  → Kotlin 2.2.0 · Coroutines · Kotlin Flow · MVVM              │
@@ -145,16 +136,16 @@
 - `ChatActivity` — SudriBot (IA intégrée)
 - `MatchDetailActivity` — détail d'un match + simulateur de score
 
-### Logique Métier *(👤 Julian · Sacha)*
-- `MatchViewModel` — gestion des données matchs (Kotlin Flow + Coroutines) — *Julian*
-- `BetResolver` — résolution automatique des paris (Gagné / Perdu) — *Julian*
-- `ActivityTransitions` — navigation entre écrans — *Julian*
-- `EmailService` — envoi d'email de confirmation à l'inscription — *Julian*
-- `DailyManager` — missions et bonus quotidiens — *Sacha*
-- `BadgeSystem` — attribution des 10 types de badges — *Sacha*
-- `LocalNotificationHelper` — notifications locales Android — *Sacha*
+### Logique Métier *(👤 Sacha)*
+- `MatchViewModel` — gestion des données matchs (Kotlin Flow + Coroutines)
+- `BetResolver` — résolution automatique des paris (Gagné / Perdu)
+- `DailyManager` — missions et bonus quotidiens
+- `BadgeSystem` — attribution des 10 types de badges
+- `LocalNotificationHelper` — notifications locales Android
+- `ActivityTransitions` — navigation entre écrans
 
-### Services Externes *(👤 Julian)*
+### Services Externes & Données *(👤 Julian)*
+- `EmailService` — envoi d'email de confirmation à l'inscription
 - `SharedPreferences (JSON)` — persistance locale via Gson
 - `Firebase Analytics` — suivi des événements
 - `Gemini API (SudriBot)` — assistant IA Gemini 2.0 Flash
@@ -164,14 +155,13 @@
 
 ## 08 — Épopées Fonctionnelles
 
-### Inscription et Connexion *(👤 Julian)*
-- Connexion avec identifiants académiques pour un accès sécurisé
-- Activation du compte via email de confirmation
+### Inscription et Connexion *(👤 Malo · Julian)*
+- `Malo` — design de l'écran login et du profil
+- `Julian` — logique d'inscription, EmailService, activation de compte par email
 
-### Placer des Paris *(👤 Sacha)*
-- Parier des SudriCoins et recevoir confirmation
-- Récupérer les récompenses en cas de victoire
-- Filtrage par sport, historique des matchs
+### Placer des Paris *(👤 Sacha · Malo)*
+- `Sacha` — logique de mise, BetResolver, historique des paris, DailyManager
+- `Malo` — interface de pari, filtrage par sport, affichage des cotes en temps réel
 
 ### Administration / Gestion *(👤 Julian)*
 - Les administrateurs BDS valident les paris, ajoutent et modifient les matchs
@@ -179,9 +169,9 @@
 
 ---
 
-## 09 — Modèle de Données *(👤 Julian)*
+## 09 — Modèle de Données *(👤 Julian · Sacha)*
 
-### `data class Bet`
+### `data class Bet` *(Sacha)*
 ```kotlin
 data class Bet(
     val id              : String,  // UUID unique
@@ -194,7 +184,7 @@ data class Bet(
 )
 ```
 
-### `data class Match`
+### `data class Match` *(Julian)*
 ```kotlin
 data class Match(
     val id        : String,
@@ -211,11 +201,11 @@ data class Match(
 )
 ```
 
-**Persistance :** 100% local via `SharedPreferences` · Paris sérialisés en JSON (Gson) · Pas de base de données externe · Compatible Android 7.0+ (API 24)
+**Persistance *(Julian) :*** 100% local via `SharedPreferences` · JSON (Gson) · Pas de BDD externe · Android 7.0+ (API 24)
 
 ---
 
-## 10 — Tests *(👤 Julian)*
+## 10 — Tests *(👤 Sacha · Julian)*
 
 Testé sur **Xiaomi 24094RAD4G — Android 15.0 (API 35, arm64-v8a)** — Build successful, **0 erreur**
 
@@ -226,24 +216,24 @@ POST /api/login  →  200 OK · 43ms · 513B
 
 ---
 
-## 11 — Difficultés Rencontrées *(Toute l'équipe)*
+## 11 — Difficultés Rencontrées
 
-| Difficulté | Problème | Solution |
-|---|---|---|
-| **Compatibilité Android** *(Malo)* | Comportements différents selon la version du téléphone | Détection de la version au lancement, bonne méthode selon le modèle |
-| **XML + Jetpack Compose** *(Malo)* | Deux systèmes UI qui ne communiquent pas naturellement | `ComposeView` comme pont entre les deux technologies |
-| **Sauvegarde locale** *(Julian)* | Le téléphone ne stocke que du texte simple, pas des objets | Sérialisation des paris en JSON via Gson avant sauvegarde |
-| **Clé API Gemini** *(Julian)* | La clé ne doit jamais être visible dans le code source | Stockée dans `local.properties` ignoré par Git, injectée à la compilation |
+| Difficulté | Problème | Solution | Porteur |
+|---|---|---|---|
+| **Compatibilité Android** | Comportements différents selon la version du téléphone | Détection de la version au lancement | 👤 Malo |
+| **XML + Jetpack Compose** | Deux systèmes UI qui ne communiquent pas naturellement | `ComposeView` comme pont | 👤 Malo |
+| **Sauvegarde locale** | Le téléphone ne stocke que du texte, pas des objets | Sérialisation JSON via Gson | 👤 Sacha |
+| **Clé API Gemini** | Ne doit jamais être visible dans le code source | `local.properties` ignoré par Git, injectée à la compilation | 👤 Julian |
 
 ---
 
-## 12 — Implémentations Futures *(Toute l'équipe)*
+## 12 — Implémentations Futures
 
 | Priorité | Fonctionnalité | Porteur |
 |---|---|---|
 | 🔴 | **API réelle du BDS** — matchs et résultats en temps réel | Julian |
 | 🔴 | **Authentification Firebase** — connexion Google OAuth2 | Julian |
-| 🟡 | **Classement multijoueur réel** — synchronisation via serveur | Julian · Malo |
+| 🟡 | **Classement multijoueur réel** — synchronisation via serveur | Malo |
 | 🟢 | **Déploiement Google Play Store** | Toute l'équipe |
 
 ---

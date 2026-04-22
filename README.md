@@ -1,12 +1,22 @@
 # SudriBet — Application Mobile Android de Paris Sportifs Étudiants
 
 > Projet ESME Sudria 2025-2026  
-> Sacha Lathuillière · Julian Expert · Malo Greffier  
+> **Sacha Lathuillière · Julian Expert · Malo Greffier**  
 > ESME / CFA SACEF
 
 ---
 
-## 01 — Le Projet
+## Équipe & Répartition
+
+| Membre | Domaine |
+|---|---|
+| 👤 **Julian Expert** | Architecture · Backend · Intégration API · BetResolver |
+| 👤 **Malo Greffier** | UX/UI Android · Gamification · Navigation · Profil · Classement |
+| 👤 **Sacha Lathuillière** | Fonctionnalités Paris · Historique · Notifications · Missions quotidiennes |
+
+---
+
+## 01 — Le Projet *(Toute l'équipe)*
 
 **SudriBet** est une application mobile Android de paris sportifs dédiée aux compétitions universitaires inter-écoles (ESME, EPITA, IPSA, CentraleSupélec…).
 
@@ -24,7 +34,7 @@
 
 ---
 
-## 02 — Analyse
+## 02 — Analyse *(Toute l'équipe)*
 
 ### Valeur ajoutée
 - Fédérer autour du sport
@@ -37,53 +47,43 @@
 
 | Stat | Valeur |
 |---|---|
-| Prêts à se déplacer pour assister aux compétitions sportifs s'ils étaient informés | **60%** |
+| Prêts à se déplacer pour assister aux compétitions s'ils étaient informés | **60%** |
 | Déjà utilisateurs de sites de paris en ligne | **12%** |
 | Utilisent leur smartphone quotidiennement | **100%** |
 
 ### Utilisateur cible — Maxime
-- **Poste :** Étudiant en école d'ingénieur
-- **Âge :** 19 ans
-- **Objectifs :** Profiter au maximum des opportunités offertes par son école
+- **Poste :** Étudiant en école d'ingénieur, 19 ans
+- **Objectifs :** Profiter au maximum des opportunités de son école
 - **Préoccupations :** Se sentir intégré et participer à des événements
 - **Profil :** Innovant, sportif, joueur, ouverture d'esprit
 
 ---
 
-## 03 — Vision & Stratégie Produit
+## 03 — Vision & Stratégie Produit *(Toute l'équipe)*
 
 | | |
 |---|---|
 | **Vision** | Augmenter de **50%** la présence des supporters aux matchs |
-| **Target Group** | Les étudiants de l'ESME, surtout les premières années |
-| **Besoins étudiants** | Centralisation des infos (scores, calendriers), accès mobile natif aux matchs en temps réel |
+| **Target Group** | Étudiants de l'ESME, surtout les premières années |
+| **Besoins étudiants** | Centralisation des infos (scores, calendriers), accès mobile natif en temps réel |
 | **Besoins BDS** | Diffusion et promotion des événements sportifs |
-| **Produit** | Application mobile Android de paris fictifs en SudriCoins (monnaie virtuelle) |
+| **Produit** | App mobile Android de paris fictifs en SudriCoins (monnaie virtuelle) |
 
-### Partenaire clé — BDS IONIS
-- Assurer l'alimentation des données et la promotion de la solution
-- **Business Goal :** Augmenter la participation aux événements sportifs
-- **Pérennité :** Que SudriBet devienne l'outil officiel du BDS
+**Partenaire clé — BDS IONIS :** Assurer l'alimentation des données et la promotion de la solution. Objectif long terme : que SudriBet devienne l'outil officiel du BDS.
 
 ---
 
-## 04 — Modèle Conceptuel
+## 04 — Modèle Conceptuel *(Julian · Architecture globale)*
 
-### Cas d'utilisations (Étudiant)
-- Consulter ses jetons, les matchs, le classement, l'historique des paris
-- Parier sur un match
-- Se connecter / S'inscrire
-
-### Cas d'utilisations (Administrateur BDS)
-- Renseigner les résultats
-- Gérer la communication, les utilisateurs, les événements sportifs
-- Générer le classement final
+### Cas d'utilisations
+**Étudiant :** Consulter ses jetons, les matchs, le classement, l'historique · Parier · Se connecter / S'inscrire  
+**Administrateur BDS :** Renseigner les résultats · Gérer utilisateurs et événements · Générer le classement final
 
 ### Architecture 3 couches
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  COUCHE PRÉSENTATION — ACTIVITIES + ADAPTERS                    │
+│  COUCHE PRÉSENTATION — ACTIVITIES + ADAPTERS        👤 Malo     │
 │  LoginActivity  HomeActivity  MainActivity  HistoryActivity     │
 │  ProfilActivity  ChatActivity  LeaderboardActivity              │
 │  MatchDetailActivity                                            │
@@ -91,14 +91,14 @@
 └─────────────────────────┬───────────────────────────────────────┘
                           ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  COUCHE MÉTIER — MANAGERS + VIEWMODEL                           │
+│  COUCHE MÉTIER — MANAGERS + VIEWMODEL        👤 Julian · Sacha  │
 │  MatchViewModel  BetResolver  DailyManager  BadgeSystem         │
 │  ActivityTransitions  EmailService  LocalNotificationHelper     │
 │  → Kotlin 2.2.0 · Coroutines · Kotlin Flow · MVVM              │
 └─────────────────────────┬───────────────────────────────────────┘
                           ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  COUCHE DONNÉES & SERVICES EXTERNES                             │
+│  COUCHE DONNÉES & SERVICES EXTERNES             👤 Julian       │
 │  SharedPreferences (JSON)  Firebase Analytics                   │
 │  Gemini API (SudriBot)  Retrofit + OkHttp  Gson                 │
 │  → Stockage 100% local · Android 7.0+ (API 24) → Android 15    │
@@ -107,31 +107,27 @@
 
 ---
 
-## 05 — Méthode de Développement
+## 05 — Méthode de Développement *(Toute l'équipe)*
 
-**Méthodologie Agile (Scrum)**
-- Organisation de l'équipe en sprints
-- Rituels du projet : daily standups, reviews
-- **But :** livrer un MVP fonctionnel le plus vite possible
+**Méthodologie Agile (Scrum)** — sprints, daily standups, reviews  
+**But :** livrer un MVP fonctionnel le plus vite possible
 
-### Outils utilisés
 | Outil | Usage |
 |---|---|
 | Notion | Gestion de projet, backlog |
 | Microsoft Teams | Communication équipe |
 | Postman | Tests API |
 | GitHub | Versioning |
-| VS Code / Android Studio | Développement |
-| Arc | Navigation & documentation |
+| Android Studio | Développement |
 
 ---
 
-## 06 — Story Mapping
+## 06 — Story Mapping *(Toute l'équipe)*
 
 | Découvrir l'app | Se Login | Parier |
 |---|---|---|
-| Être sensibilisé par le BDS | Accéder à la page d'accueil | Avoir une vision globale des matchs |
-| Être sensibilisé via les réseaux sociaux | Pouvoir créer un compte personnel | Enregistrer des paris |
+| Sensibilisé par le BDS | Accéder à la page d'accueil | Vision globale des matchs |
+| Sensibilisé via réseaux sociaux | Créer un compte personnel | Enregistrer des paris |
 | | | Visionner son historique |
 | | | Accéder au classement |
 
@@ -139,26 +135,26 @@
 
 ## 07 — Implémentation
 
-### UI / Activities
+### UI / Activities *(👤 Malo)*
 - `LoginActivity` — écran de connexion / inscription
-- `HomeActivity` — dashboard principal avec SudriCoins et missions
+- `HomeActivity` — dashboard avec SudriCoins et missions quotidiennes
 - `MainActivity` — liste des matchs (Jetpack Compose)
 - `ProfilActivity` — profil avec badges et statistiques
 - `LeaderboardActivity` — classement général
 - `HistoryActivity` — historique des paris
 - `ChatActivity` — SudriBot (IA intégrée)
-- `MatchDetailActivity` — détail d'un match avec simulateur de score
+- `MatchDetailActivity` — détail d'un match + simulateur de score
 
-### Logique Métier
-- `MatchViewModel` — gestion des données matchs (Kotlin Flow + Coroutines)
-- `BetResolver` — résolution automatique des paris (Gagné / Perdu)
-- `DailyManager` — missions et bonus quotidiens
-- `BadgeSystem` — attribution des 10 types de badges
-- `ActivityTransitions` — navigation entre écrans
-- `EmailService` — envoi d'email de confirmation à l'inscription
-- `LocalNotificationHelper` — notifications locales Android
+### Logique Métier *(👤 Julian · Sacha)*
+- `MatchViewModel` — gestion des données matchs (Kotlin Flow + Coroutines) — *Julian*
+- `BetResolver` — résolution automatique des paris (Gagné / Perdu) — *Julian*
+- `ActivityTransitions` — navigation entre écrans — *Julian*
+- `EmailService` — envoi d'email de confirmation à l'inscription — *Julian*
+- `DailyManager` — missions et bonus quotidiens — *Sacha*
+- `BadgeSystem` — attribution des 10 types de badges — *Sacha*
+- `LocalNotificationHelper` — notifications locales Android — *Sacha*
 
-### Services Externes
+### Services Externes *(👤 Julian)*
 - `SharedPreferences (JSON)` — persistance locale via Gson
 - `Firebase Analytics` — suivi des événements
 - `Gemini API (SudriBot)` — assistant IA Gemini 2.0 Flash
@@ -168,28 +164,22 @@
 
 ## 08 — Épopées Fonctionnelles
 
-### Épopée : Inscription et Connexion
-**Connexion Étudiant** — Se connecter avec ses identifiants pour un accès sécurisé et facile  
-**Activation du Compte** — Activer son compte via une confirmation par email
+### Inscription et Connexion *(👤 Julian)*
+- Connexion avec identifiants académiques pour un accès sécurisé
+- Activation du compte via email de confirmation
 
-### Épopée : Placer des Paris
-**Prise en compte de la mise :**
-- Parier des points virtuels (SudriCoins)
-- Recevoir la confirmation du pari
-- Récupérer les récompenses si victoire
+### Placer des Paris *(👤 Sacha)*
+- Parier des SudriCoins et recevoir confirmation
+- Récupérer les récompenses en cas de victoire
+- Filtrage par sport, historique des matchs
 
-**Possibilités d'analyse :**
-- Voir la liste complète des matchs
-- Filtrage par sport (Football, Rugby, Basket, Handball, Volley)
-- Historique des matchs et des paris
-
-### Épopée : Administration / Gestion
-**Ajouter / Modifier des matchs :** Les administrateurs BDS valident les paris, ajoutent de nouveaux matchs, modifient les détails des événements  
-**Exporter les résultats :** Générer et exporter les résultats des matchs et les données utilisateurs
+### Administration / Gestion *(👤 Julian)*
+- Les administrateurs BDS valident les paris, ajoutent et modifient les matchs
+- Export des résultats et données utilisateurs
 
 ---
 
-## 09 — Modèle de Données
+## 09 — Modèle de Données *(👤 Julian)*
 
 ### `data class Bet`
 ```kotlin
@@ -208,61 +198,53 @@ data class Bet(
 ```kotlin
 data class Match(
     val id        : String,
-    val equipeA   : String,           // équipe domicile
-    val equipeB   : String,           // équipe extérieure
-    val coteA     : Double,           // cote victoire A
-    val coteB     : Double,           // cote victoire B
+    val equipeA   : String,
+    val equipeB   : String,
+    val coteA     : Double,
+    val coteB     : Double,
     val heure     : String,           // "HH:MM"
     val categorie : String,           // "Football"|"Rugby"|"Basket"|"Handball"|"Volley"
-    val isLive    : Boolean = false,  // score mis à jour toutes les 3 secondes
+    val isLive    : Boolean = false,
     val scoreA    : Int     = 0,
     val scoreB    : Int     = 0,
     val coteNul   : Double? = null    // nul disponible uniquement au football
 )
 ```
 
-### Persistance locale
-- Stockage **100% local** via `SharedPreferences`
-- Paris sérialisés en **JSON** (Gson)
-- Solde stocké en `Float`
-- Pas de base de données externe
-- Compatible **Android 7.0+ (API 24)**
+**Persistance :** 100% local via `SharedPreferences` · Paris sérialisés en JSON (Gson) · Pas de base de données externe · Compatible Android 7.0+ (API 24)
 
 ---
 
-## 10 — Tests
+## 10 — Tests *(👤 Julian)*
 
-Tests réalisés sur **Xiaomi 24094RAD4G — Android 15.0 (API 35, arm64-v8a)**  
-Build successful, **0 erreur**
+Testé sur **Xiaomi 24094RAD4G — Android 15.0 (API 35, arm64-v8a)** — Build successful, **0 erreur**
 
-Communication Front/Back testée via Postman :
 ```
-POST /api/login
-→ 200 OK · 43ms · 513B
+POST /api/login  →  200 OK · 43ms · 513B
 { "success": true, "user": { "email": "...", "emailConfirmed": true } }
 ```
 
 ---
 
-## 11 — Difficultés Rencontrées
+## 11 — Difficultés Rencontrées *(Toute l'équipe)*
 
 | Difficulté | Problème | Solution |
 |---|---|---|
-| **Compatibilité Android** | Certaines fonctions changent de comportement selon la version du téléphone | Détection de la version Android au lancement, utilisation de la bonne méthode selon le modèle |
-| **Mélange de deux technologies UI** | XML classique et Jetpack Compose ne communiquent pas naturellement | Utilisation d'un composant pont (`ComposeView`) pour intégrer Compose dans une page XML |
-| **Sauvegarde des données en local** | Le téléphone ne peut stocker que du texte simple, pas des objets complexes | Sérialisation des paris en JSON avant sauvegarde, désérialisation à la lecture (Gson) |
-| **Sécuriser la clé API de l'IA** | La clé Gemini ne doit jamais être visible dans le code source | Stockage dans `local.properties` ignoré par Git, injection automatique à la compilation |
+| **Compatibilité Android** *(Malo)* | Comportements différents selon la version du téléphone | Détection de la version au lancement, bonne méthode selon le modèle |
+| **XML + Jetpack Compose** *(Malo)* | Deux systèmes UI qui ne communiquent pas naturellement | `ComposeView` comme pont entre les deux technologies |
+| **Sauvegarde locale** *(Julian)* | Le téléphone ne stocke que du texte simple, pas des objets | Sérialisation des paris en JSON via Gson avant sauvegarde |
+| **Clé API Gemini** *(Julian)* | La clé ne doit jamais être visible dans le code source | Stockée dans `local.properties` ignoré par Git, injectée à la compilation |
 
 ---
 
-## 12 — Implémentations Futures
+## 12 — Implémentations Futures *(Toute l'équipe)*
 
-| Priorité | Fonctionnalité | Description |
+| Priorité | Fonctionnalité | Porteur |
 |---|---|---|
-| 🔴 | **API réelle du BDS** | Connecter l'app aux vrais matchs et résultats du BDS IONIS en temps réel |
-| 🔴 | **Authentification sécurisée** | Migration vers Firebase Authentication (connexion Google OAuth2) |
-| 🟡 | **Classement multijoueur réel** | Synchronisation des scores entre tous les utilisateurs via un vrai serveur |
-| 🟢 | **Déploiement Play Store** | Publication sur le Google Play Store pour tous les étudiants ESME |
+| 🔴 | **API réelle du BDS** — matchs et résultats en temps réel | Julian |
+| 🔴 | **Authentification Firebase** — connexion Google OAuth2 | Julian |
+| 🟡 | **Classement multijoueur réel** — synchronisation via serveur | Julian · Malo |
+| 🟢 | **Déploiement Google Play Store** | Toute l'équipe |
 
 ---
 
@@ -277,8 +259,6 @@ POST /api/login
 | **Stockage** | SharedPreferences + Gson (JSON) |
 | **IA** | Google Gemini 2.0 Flash (SudriBot) |
 | **Analytics** | Firebase Analytics |
-| **Notifications** | LocalNotificationHelper (Android natif) |
-| **Email** | JavaMail / EmailService |
 | **Min SDK** | Android 7.0 (API 24) |
 | **Target SDK** | Android 15 (API 35) |
 
@@ -286,12 +266,6 @@ POST /api/login
 
 ## Lancer le projet
 
-### Prérequis
-- Android Studio Hedgehog ou supérieur
-- JDK 17+
-- Clé API Google Gemini
-
-### Installation
 ```bash
 git clone https://github.com/Julian33110/sudribet_appli_mobile.git
 cd sudribet_appli_mobile
@@ -302,17 +276,7 @@ Ajouter dans `local.properties` :
 GEMINI_API_KEY=votre_clé_ici
 ```
 
-Puis ouvrir le projet dans Android Studio et **Run**.
-
----
-
-## Équipe
-
-| Nom | Rôle |
-|---|---|
-| **Julian Expert** | Architecture · Intégration API · Backend · Système de résolution des paris |
-| **Malo Greffier** | UX/UI Android · Gamification · Navigation · Profil · Classement |
-| **Sacha Lathuillière** | Fonctionnalités Paris · Historique · Notifications · Missions quotidiennes |
+Ouvrir dans Android Studio → **Run**
 
 ---
 

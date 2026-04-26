@@ -71,7 +71,7 @@ class ChatActivity : AppCompatActivity() {
             try {
                 // Initialisation du modèle Gemini
                 val generativeModel = GenerativeModel(
-                    modelName = "gemini-1.5-flash",
+                    modelName = "gemini-2.0-flash",
                     apiKey = BuildConfig.GEMINI_API_KEY,
                     systemInstruction = content { 
                         text("Tu es SudriBot, l'assistant IA de l'application SudriBet. Tu réponds de manière courte et concise. Si l'utilisateur te demande un pari ou un conseil de mise, tu peux proposer un pari spécifique en incluant à la fin de ta réponse un bloc JSON de ce format : [[BET_JSON:{\"desc\": \"Victoire ESME\", \"cote\": 2.10}]]. Les écoles possibles sont ESME, EPITA, IPSA, Epitech, HEC, Centrale. Ne parle que de sports universitaires.") 

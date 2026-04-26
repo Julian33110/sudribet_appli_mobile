@@ -11,43 +11,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- ══════════ HEADER ══════════ -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/background_blue"
-            android:padding="24dp">
+            android:layout_height="220dp"
+            android:background="@drawable/gradient_header"
+            android:padding="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SUDRIBET"
-                android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.2" />
-
+            <!-- Logo + titre -->
             <LinearLayout
+                android:id="@+id/llLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SOLDE VIRTUEL"
-                    android:textColor="#CCFFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:text="SUDRI"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.15" />
+
                 <TextView
-                    android:id="@+id/tvHomeBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="150 SC"
-                    android:textColor="@color/neon_green"
-                    android:textSize="32sp"
-                    android:textStyle="bold" />
+                    android:text="BET"
+                    android:textColor="@color/primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.15" />
             </LinearLayout>
 
+            <!-- Bonus + Avatar (en haut à droite) -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,15 +57,15 @@
                     android:id="@+id/btnClaimBonus"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:src="@android:drawable/btn_star_big_on"
                     android:contentDescription="Bonus"
                     app:tint="#FFC107" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/btnGoProfil"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@android:drawable/ic_menu_gallery"
                     android:background="#22FFFFFF"
                     android:padding="2dp"
@@ -75,8 +73,94 @@
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp" />
             </LinearLayout>
+
+            <!-- Salutation + solde (en bas) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bonjour, Parieur 👋"
+                    android:textColor="#AACCFF"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="4dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SOLDE VIRTUEL"
+                            android:textColor="#66FFFFFF"
+                            android:textSize="10sp"
+                            android:letterSpacing="0.15" />
+
+                        <TextView
+                            android:id="@+id/tvHomeBalance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="150 SC"
+                            android:textColor="@color/neon_green"
+                            android:textSize="36sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Raccourcis rapides -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/btnQuickBet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:background="@drawable/btn_quick_action"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="PARIER"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <TextView
+                            android:id="@+id/btnQuickHistory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:background="@drawable/btn_quick_action_outline"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:layout_marginStart="8dp"
+                            android:text="MES PARIS"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </RelativeLayout>
 
+        <!-- ══════════ CONTENU ══════════ -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -87,65 +171,81 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingTop="20dp"
                 android:paddingBottom="80dp">
 
+                <!-- SudriBot widget -->
                 <FrameLayout
                     android:id="@+id/cardBotWidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="-30dp"
-                    android:background="@drawable/glass_card"
-                    android:padding="16dp">
+                    android:background="@drawable/card_accent"
+                    android:padding="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
+
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:background="#11FFFFFF"
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:background="#1Aff7941"
                             android:gravity="center"
                             android:text="&#129302;"
                             android:textSize="28sp" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:layout_marginStart="16dp">
+                            android:layout_marginStart="14dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="SudriBot IA"
                                 android:textColor="#FFFFFF"
-                                android:textSize="16sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Conseils de paris personnalises"
+                                android:text="Conseils de paris personnalisés"
                                 android:textColor="#99FFFFFF"
-                                android:textSize="13sp" />
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@android:drawable/ic_media_play"
-                            app:tint="@color/primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/btn_quick_action"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:text="Ouvrir"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </FrameLayout>
 
+                <!-- MISSIONS DU JOUR -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="10dp"
                     android:text="MISSIONS DU JOUR"
                     android:textColor="@color/primary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.2" />
 
@@ -155,49 +255,95 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="@drawable/glass_card"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="4dp">
 
-                    <TextView
-                        android:id="@+id/tvMission1"
+                    <!-- Mission 1 -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Place 3 paris aujourd'hui - +20 SC [0/3]"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingVertical="6dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:text="🎯"
+                            android:textSize="16sp"
+                            android:gravity="center" />
+                        <TextView
+                            android:id="@+id/tvMission1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:text="Place 3 paris aujourd'hui - +20 SC [0/3]"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" android:layout_marginVertical="4dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#15FFFFFF" android:layout_marginHorizontal="12dp"/>
 
-                    <TextView
-                        android:id="@+id/tvMission2"
+                    <!-- Mission 2 -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gagne un pari - +30 SC [0/1]"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingVertical="6dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:text="🏆"
+                            android:textSize="16sp"
+                            android:gravity="center" />
+                        <TextView
+                            android:id="@+id/tvMission2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:text="Gagne un pari - +30 SC [0/1]"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22FFFFFF" android:layout_marginVertical="4dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#15FFFFFF" android:layout_marginHorizontal="12dp"/>
 
-                    <TextView
-                        android:id="@+id/tvMission3"
+                    <!-- Mission 3 -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Parie sur un match ESME - +15 SC [0/1]"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:paddingVertical="6dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:text="⚡"
+                            android:textSize="16sp"
+                            android:gravity="center" />
+                        <TextView
+                            android:id="@+id/tvMission3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:text="Parie sur un match ESME - +15 SC [0/1]"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
+                <!-- CLASSEMENT -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="10dp"
                     android:text="CLASSEMENT"
                     android:textColor="@color/primary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.2" />
 
@@ -210,55 +356,63 @@
                     android:padding="16dp"
                     android:clickable="true"
                     android:focusable="true">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
+
                         <TextView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
                             android:background="#11FFFFFF"
                             android:gravity="center"
                             android:text="&#127942;"
                             android:textSize="28sp" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:layout_marginStart="16dp">
+                            android:layout_marginStart="14dp">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Top Parieurs ESME"
                                 android:textColor="#FFFFFF"
-                                android:textSize="16sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Voir le classement de ta promo"
                                 android:textColor="#99FFFFFF"
-                                android:textSize="13sp" />
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
+
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@android:drawable/ic_media_play"
                             app:tint="@color/primary" />
                     </LinearLayout>
                 </FrameLayout>
 
+                <!-- ACTU ÉCOLES -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:text="ACTU ECOLES"
+                    android:layout_marginBottom="10dp"
+                    android:text="ACTU ÉCOLES"
                     android:textColor="@color/primary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.2" />
 
@@ -266,33 +420,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginBottom="16dp"
                     android:background="@drawable/glass_card"
                     android:orientation="vertical"
                     android:clipChildren="true">
+
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
+                        android:layout_height="160dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/img_football" />
-                    <TextView
+
+                    <!-- Overlay titre sur l'image -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingTop="12dp"
-                        android:text="FINALE COUPE DES INGENIEURS"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingBottom="12dp"
-                        android:paddingTop="4dp"
-                        android:text="ESME vs EPITA : Le derby tant attendu. Plus de 2000 etudiants attendus !"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="14sp" />
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#33ff7941"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:text="LIVE"
+                            android:textColor="@color/primary"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="FINALE COUPE DES INGÉNIEURS"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:layout_marginTop="6dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ESME vs EPITA · Plus de 2000 étudiants attendus !"
+                            android:textColor="#AAAAAA"
+                            android:textSize="13sp"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>

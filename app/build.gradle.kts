@@ -2,8 +2,9 @@ import java.util.Properties
 
 plugins {
     id("com.android.application") version "8.7.3"
-    id("org.jetbrains.kotlin.android") version "2.0.21"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
+    id("org.jetbrains.kotlin.android") version "2.2.0"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
+    id("com.google.gms.google-services") version "4.4.2"
 }
 
 android {
@@ -67,6 +68,10 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
     // Libs tierces
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")

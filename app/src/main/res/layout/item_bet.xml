@@ -61,7 +61,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MISE" android:textSize="10sp" />
-                <TextView android:id="@+id/tvBetMise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10.00 €" android:textStyle="bold" />
+                <TextView android:id="@+id/tvBetMise" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10 SC" android:textStyle="bold" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -78,7 +78,7 @@
                 android:orientation="vertical"
                 android:gravity="end">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="GAINS POT." android:textSize="10sp" />
-                <TextView android:id="@+id/tvBetGains" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="25.00 €" android:textColor="#4CAF50" android:textStyle="bold" />
+                <TextView android:id="@+id/tvBetGains" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="25 SC" android:textColor="#4CAF50" android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -3,15 +3,18 @@ package com.example.sudribet
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 import java.util.*
 
 class ProfilActivity : AppCompatActivity() {
@@ -40,7 +43,7 @@ class ProfilActivity : AppCompatActivity() {
         tvLevel = findViewById(R.id.tvLevel)
         pbXP = findViewById(R.id.pbXP)
         tvStreakText = findViewById(R.id.tvStreakText)
-        badgeContainer = findViewById(R.id.badgeContainer)
+        badgeContainer = findViewById(R.id.badgeContainer) ?: return
 
         val btnBack = findViewById<ImageView>(R.id.ivBack)
         val btnEdit = findViewById<Button>(R.id.btnEditProfil)
@@ -48,6 +51,7 @@ class ProfilActivity : AppCompatActivity() {
         val switchDarkMode = findViewById<SwitchMaterial>(R.id.switchDarkMode)
 
         updateUI()
+        loadAvatar()
 
         val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
         val isDark = prefs.getBoolean("dark_mode", false)
@@ -82,9 +86,19 @@ class ProfilActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateUI()
+        loadAvatar()
         val prefs = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
         findViewById<SwitchMaterial>(R.id.switchDarkMode)?.isChecked = prefs.getBoolean("dark_mode", false)
         findViewById<BottomNavigationView>(R.id.bottomNav)?.selectedItemId = R.id.nav_profil
+    }
+
+    private fun loadAvatar() {
+        val path = getSharedPreferences("SudriPrefs", Context.MODE_PRIVATE)
+            .getString("avatar_path", null) ?: return
+        val file = File(path)
+        if (file.exists()) {
+            findViewById<ShapeableImageView>(R.id.ivAvatar)?.setImageURI(Uri.fromFile(file))
+        }
     }
 
     private fun updateUI() {
@@ -100,7 +114,7 @@ class ProfilActivity : AppCompatActivity() {
         val betsList: List<Bet> = Gson().fromJson(betsJson, type)
 
         val activeCount = betsList.count { it.status == "En cours" }
-        val winsCount = betsList.count { it.status == "Gagne" }
+        val winsCount = betsList.count { it.status == "Gagné" }
         val lossesCount = betsList.count { it.status == "Perdu" }
 
         tvActiveBets.text = activeCount.toString()
@@ -122,11 +136,11 @@ class ProfilActivity : AppCompatActivity() {
         pbXP.progress = progress.toInt()
 
         var streak = 0
-        for (bet in betsList) { if (bet.status == "Gagne") streak++ else break }
+        for (bet in betsList) { if (bet.status == "Gagné") streak++ else break }
         tvStreakText.text = "Serie x$streak"
-        findViewById<android.view.View>(R.id.tvStreakIcon).alpha = if (streak > 0) 1.0f else 0.3f
+        findViewById<android.view.View>(R.id.tvStreakIcon)?.alpha = if (streak > 0) 1.0f else 0.3f
 
-        updateBadges(betsList, balance)
+        try { updateBadges(betsList, balance) } catch (e: Exception) { e.printStackTrace() }
     }
 
     private fun updateBadges(bets: List<Bet>, balance: Float) {

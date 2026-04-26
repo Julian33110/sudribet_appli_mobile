@@ -76,36 +76,10 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <!-- Sports Filter -->
-        <HorizontalScrollView
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composeViewMatchs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:paddingVertical="10dp"
-            android:background="?attr/colorSurface">
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupSports"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                app:singleSelection="true"
-                app:selectionRequired="true">
-                <com.google.android.material.chip.Chip android:id="@+id/chipTous" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tous" android:checked="true" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipFoot" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Football" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipRugby" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rugby" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipBasket" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Basket" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipVolley" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volley" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipHand" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Handball" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMatchs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingBottom="80dp"
-            android:clipToPadding="false" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -160,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mise (€) :"
+                    android:text="Mise (SC) :"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     android:textSize="14sp" />
@@ -191,7 +165,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gains potentiels :"
+                    android:text="Gains potentiels SC :"
                     android:textColor="#CCFFFFFF"
                     android:textSize="14sp" />
                     
@@ -200,7 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:text="0.00 €"
+                    android:text="0 SC"
                     android:textColor="#4CAF50"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -225,6 +199,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:backgroundTint="@color/surface_darker"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/nav_item_colors"
         app:itemTextColor="@color/nav_item_colors"

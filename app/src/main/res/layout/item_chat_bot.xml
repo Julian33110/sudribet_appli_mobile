@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="4dp"
+    android:padding="8dp"
     android:gravity="start|bottom">
 
     <androidx.cardview.widget.CardView
@@ -12,12 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardElevation="1dp">
+        app:cardBackgroundColor="@color/surface_bg_dark"
+        app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="100dp"
             android:orientation="vertical"
             android:paddingHorizontal="14dp"
             android:paddingVertical="10dp">
@@ -26,19 +27,73 @@
                 android:id="@+id/tvMessageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="250dp"
                 android:text="Message bot"
-                android:textColor="#1C1E21"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:lineSpacingExtra="2dp" />
+
+            <!-- Bet Ticket Section (Dynamic) -->
+            <LinearLayout
+                android:id="@+id/layoutBetTicket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/glass_card"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TICKET PROPOSÉ"
+                    android:textColor="@color/primary"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBetDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Victoire ESME à domicile"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBetCote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Cote: 2.10"
+                    android:textColor="@color/neon_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnQuickBet"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/primary"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:padding="0dp"
+                    android:text="PLACER LE PARI"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvMessageTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="12:00"
                 android:textColor="#8A8D91"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:layout_gravity="end"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

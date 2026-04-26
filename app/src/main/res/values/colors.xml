@@ -4,7 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#ff7941</color>
     <color name="primary_dark">#d45d2e</color>
-    <color name="background_blue">#003366</color>
+    <color name="background_blue">#001122</color>
+    <color name="neon_green">#39FF14</color>
+    <color name="neon_red">#FF3131</color>
+    <color name="glass_white">#22FFFFFF</color>
+    <color name="glass_border">#44FFFFFF</color>
+    <color name="surface_darker">#0A0A0A</color>
 
     <!-- Light mode -->
     <color name="surface_bg">#F5F5F5</color>

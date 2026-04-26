@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "162682282495",
+    "project_id": "sudribet",
+    "storage_bucket": "sudribet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162682282495:android:acb2a7c2f00dc46a2fc7ca",
+        "android_client_info": {
+          "package_name": "com.example.sudribet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj7TtxENin9AiynKdfNGJrkmUcwUS8_so"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

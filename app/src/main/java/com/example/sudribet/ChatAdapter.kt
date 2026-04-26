@@ -35,6 +35,17 @@ class ChatAdapter(private val messages: List<Message>) : RecyclerView.Adapter<Re
         } else if (holder is BotViewHolder) {
             holder.text.text = msg.text
             holder.time.text = msg.time
+            
+            if (msg.betDescription != null && msg.betCote != null) {
+                holder.layoutBet.visibility = View.VISIBLE
+                holder.tvBetDesc.text = msg.betDescription
+                holder.tvBetCote.text = "Cote: ${msg.betCote}"
+                holder.btnBet.setOnClickListener {
+                    // Logique pour placer le pari (déjà géré par la description)
+                }
+            } else {
+                holder.layoutBet.visibility = View.GONE
+            }
         }
     }
 
@@ -48,5 +59,9 @@ class ChatAdapter(private val messages: List<Message>) : RecyclerView.Adapter<Re
     class BotViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val text: TextView = view.findViewById(R.id.tvMessageText)
         val time: TextView = view.findViewById(R.id.tvMessageTime)
+        val layoutBet: View = view.findViewById(R.id.layoutBetTicket)
+        val tvBetDesc: TextView = view.findViewById(R.id.tvBetDesc)
+        val tvBetCote: TextView = view.findViewById(R.id.tvBetCote)
+        val btnBet: View = view.findViewById(R.id.btnQuickBet)
     }
 }

@@ -2,10 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Sudribet" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorSurface">@color/card_bg</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-        <item name="android:windowBackground">@color/surface_bg</item>
-        <item name="android:statusBarColor">@color/background_blue</item>
+        <item name="colorSurface">@color/surface_darker</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:windowBackground">@color/surface_darker</item>
+        <item name="android:statusBarColor">@color/surface_darker</item>
+        <item name="android:navigationBarColor">@color/surface_darker</item>
     </style>
 
     <style name="Theme.Sudribet" parent="Base.Theme.Sudribet" />
